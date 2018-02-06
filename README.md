@@ -7,4 +7,5 @@ order in which distributers should deliver orders
 # actors
 We have 3 actors { Customer, Provider, Distributer }
 
-For more information read our documents in path ./docs/tex/transportation-system.pdf
+# document!
+For more information read our documents in path ./docs/finaldocument/transportation-system.pdf
