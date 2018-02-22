@@ -1,0 +1,42 @@
+create database buyit;
+
+create table user ( id varchar(32) primary key,
+					name varchar(50) not null,
+					email varchar(50) not null,
+					passwordSalt varchar(12) unique not null,
+					passwordEncrypt varchar(32) not null,
+					avatar varchar(32),
+					phone varchar(15),
+					location varchar(50) not null,
+					address varchar(50) not null,
+					role varchar(12) not null);
+
+create table salesman ( userId varchar(32) unique not null,
+						capacity int not null,
+						available bit not null default 1,
+						foreign key (userId) references user(id));
+
+create table route (id varchar(32) primary key,
+					salesmanId varchar(32) unique not null,
+					foreign key (salesmanId) references user(id));
+
+create table path ( id varchar(32) primary key,
+					routeId varchar(32) not null,
+					order int not null,
+					location varchar(50) not null,
+					foreign key (routeId) references route(id));
+
+create table request (  id varchar(32) primary key,
+						customerId varchar(32) not null,
+						salesmanId varchar(32) not null);
+
+create table product (  id varchar(32) primary key,
+						name varchar(50) not null,
+						description varchar(255),
+						price double not null,
+						quantity int not null,
+						photo varchar(32));
+
+create table order (id varchar(32) primary key,
+					quantity int not null default 1,
+					productId varchar(32) );
