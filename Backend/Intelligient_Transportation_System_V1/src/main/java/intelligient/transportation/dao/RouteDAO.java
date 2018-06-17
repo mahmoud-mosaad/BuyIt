@@ -1,34 +1,44 @@
 package intelligient.transportation.dao;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+
+import intelligient.transportation.models.Route;
 
 @Component
 @Service
 @Repository
 public class RouteDAO {
 	
-	/*
-	  @Autowired
+	
+	@Autowired
 	private SessionFactory sessionFactory;
-	public void createEmployee(user user){
+	
+
+	
+	public Integer createRoute(Route route){
 		Session session= null;
 		try {
 		
 		
 			session = sessionFactory.openSession();
 			session.beginTransaction();
-			Integer id =(Integer) session.save(user);
-			System.out.println("user is created With Id::"+id);
+			int id =(Integer) session.save(route);
+			System.out.println("route is created With Id::"+id);
 			session.getTransaction().commit();
 			session.close();
+			return id;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return null;
 		
 	}
-	
+	/*
 	public List getUserDetails() {
 		Criteria criteria = sessionFactory.openSession().createCriteria(user.class);
 		return criteria.list();

@@ -25,7 +25,7 @@ public class Request {
 	@OneToMany(mappedBy = "request", fetch = FetchType.LAZY, cascade = CascadeType.ALL )
 	private Collection<Order> orders = new ArrayList<Order>();
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL )
+	@ManyToOne(fetch = FetchType.EAGER )
 	@JoinColumn(name="customer_id")
 	private User user;
 	
