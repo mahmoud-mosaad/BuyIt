@@ -60,7 +60,8 @@ public class ProductController {
 		                        new BufferedOutputStream(new FileOutputStream
 		                        		(new File(path)));
 					
-					 prod.setPhoto(path);
+					 prod.setPhoto("ProductsImages/" + 
+             				prod.getName() + " " + file.getOriginalFilename());
 		             stream.write(bytes);
 		             stream.close();
 		            } catch (Exception e) {
