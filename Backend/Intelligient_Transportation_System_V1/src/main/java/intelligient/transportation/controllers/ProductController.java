@@ -54,14 +54,14 @@ public class ProductController {
                 
                 Product prod = new ObjectMapper().readValue(productJSON, Product.class);
                 String path = "src/main/resources/static/ProductsImages/" + 
-                				prod.getName() + " " + file.getOriginalFilename();
+                				prod.getName() + "_" + file.getOriginalFilename();
 				try {
 					 BufferedOutputStream stream = 
 		                        new BufferedOutputStream(new FileOutputStream
 		                        		(new File(path)));
 					
 					 prod.setPhoto("ProductsImages/" + 
-             				prod.getName() + " " + file.getOriginalFilename());
+             				prod.getName() + "_" + file.getOriginalFilename());
 		             stream.write(bytes);
 		             stream.close();
 		            } catch (Exception e) {

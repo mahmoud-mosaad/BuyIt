@@ -46,6 +46,7 @@ public class RequestController {
 	@ResponseBody
 	public String signUp(@RequestBody String request,@RequestHeader String token, HttpServletResponse response) {
 		
+		/*
 		System.out.println(token);
 		int decodedUserId = TokenHandler.getUserIdFromToken(token);
 		System.out.println(decodedUserId);
@@ -53,7 +54,7 @@ public class RequestController {
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			return "Request rejected Wrong token, token can't be verified";
 		}
-		
+		*/
 		Request reqObj = requestDAO.createRequest(request);
 		JSONObject req = new JSONObject(request);
 		JSONArray products = req.getJSONArray("products");
