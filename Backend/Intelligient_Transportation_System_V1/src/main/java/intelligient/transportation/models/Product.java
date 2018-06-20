@@ -22,17 +22,13 @@ public class Product {
 	
 	private String name;
 	
-	private String decription;
+	private String description;
 	
 	private String photo;
 	
 	private Integer price;
 	
 	private Integer quantity;
-	
-    @Lob
-    @Column(name="blob_photo", columnDefinition="mediumblob")
-    private byte[] blobPhoto;
 	
 	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL )
 	private Collection<Order> orders = new ArrayList<Order>();
@@ -53,12 +49,12 @@ public class Product {
 		this.name = name;
 	}
 
-	public String getDecription() {
-		return decription;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setDecription(String decription) {
-		this.decription = decription;
+	public void setDescription(String decription) {
+		this.description = decription;
 	}
 
 	public String getPhoto() {
@@ -91,14 +87,6 @@ public class Product {
 
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
-	}
-	
-	public byte[] getBlobPhoto() {
-		return blobPhoto;
-	}
-
-	public void setBlobPhoto(byte[] blobPhoto) {
-		this.blobPhoto = blobPhoto;
 	}
 	
 }
