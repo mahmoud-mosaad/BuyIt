@@ -18,9 +18,31 @@ import intelligient.transportation.models.Salesman;
 @Repository
 public class SalesmanDAO {
 	
-	  @Autowired
-	private SessionFactory sessionFactory;
-	  
+		@Autowired
+		private SessionFactory sessionFactory;  
+		  
+		public void createSalesman(Salesman salesman){
+			
+			salesman.setAvailable(true);
+				
+			try {
+				Session session;
+				session = sessionFactory.openSession();
+				session.beginTransaction();
+				
+				Integer id =(Integer) session.save(salesman);
+				String apiToken = TokenHandler.createToken(id);
+				salesman.setApiToken(apiToken);
+				System.out.println("salesman is created With Id:"+ id);
+				
+				session.getTransaction().commit();
+				session.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
+		
 	  public List<Salesman> getAvailableUsers(){
 		 Session session = sessionFactory.openSession();
 		  //session.beginTransaction();
@@ -42,20 +64,7 @@ public class SalesmanDAO {
 			  
 			  
 		  }
-	/*public void createEmployee(user user){
-		Session session= null;
-		try {
-			session = sessionFactory.openSession();
-			session.beginTransaction();
-			Integer id =(Integer) session.save(user);
-			System.out.println("user is created With Id::"+id);
-			session.getTransaction().commit();
-			session.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-	}*/
+	  
 	
 	/*public List getUserDetails() {
 		Criteria criteria = sessionFactory.openSession().createCriteria(user.class);

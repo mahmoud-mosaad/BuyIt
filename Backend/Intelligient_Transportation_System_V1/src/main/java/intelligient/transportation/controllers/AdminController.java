@@ -15,34 +15,20 @@ import intelligient.transportation.dao.AdminDAO;
 import intelligient.transportation.models.Admin;
 import intelligient.transportation.models.Customer;
 import intelligient.transportation.models.User;
+
+
 @RestController
 @RequestMapping("/admin")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public class AdminController extends UserController{
 
 	@Autowired
 	private AdminDAO adminDAO;
 	
-	@RequestMapping(value="/login", method=RequestMethod.POST)
+	@RequestMapping(value="/logInAdmin", method=RequestMethod.POST)
 	@ResponseBody
-	public HashMap<String, Integer> login(
-			@RequestBody Admin a
-			) {
+	public String logIn(@RequestBody Admin admin) {
 		
-		Admin admin = adminDAO.findByEmaiAndPassword(a.getEmail(),a.getPassword());
-		 HashMap<String, Integer> map = new HashMap<String, Integer> ();
-		if(admin!=null){
-		 map.put("statusCode", 200);
-		 map.put("token",admin.getId());
-		 return map;
-		}
-		map.put("statusCode", 404);
-		 return map;
-		
-		
-	//	CustomerDAO customerDAO  = new CustomerDAO();
-		//this.customerDAO.createCustomer(customer);
-		
+		return adminDAO.logInAdmin(admin);
 	}
-	
 }

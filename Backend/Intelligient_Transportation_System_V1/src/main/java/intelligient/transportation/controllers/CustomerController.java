@@ -14,16 +14,16 @@ import intelligient.transportation.models.Customer;
 @RequestMapping("/customer")
 public class CustomerController extends UserController{
 	
-	@Autowired
-	private CustomerDAO customerDAO;
+	@Autowired 
+	CustomerDAO customerDAO;
 	
-	@RequestMapping(value="/sign_up", method=RequestMethod.POST)
+	@RequestMapping(value="/signUp", method=RequestMethod.POST)
 	@ResponseBody
-	public Customer sign_up(@RequestBody Customer customer) {
-	//	CustomerDAO customerDAO  = new CustomerDAO();
-		this.customerDAO.createCustomer(customer);
+	public Customer signUp(@RequestBody Customer customer) {
 		
+		customerDAO.createCustomer(customer);
 		return customer;
 	}
 	
+
 }

@@ -20,10 +20,10 @@ public class Order {
 	
 	private Integer quantity;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL )
+	@ManyToOne(fetch = FetchType.LAZY )
 	private Product product;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL )
+	@ManyToOne(fetch = FetchType.LAZY )
 	private Request request;
 	
 	public Integer getId() {
@@ -50,5 +50,8 @@ public class Order {
 		this.product = product;
 	}
 
-
+	public void setRequest(Request req) {
+		this.request = req;
+	}
+	
 }

@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -27,6 +29,10 @@ public class Product {
 	private Integer price;
 	
 	private Integer quantity;
+	
+    @Lob
+    @Column(name="blob_photo", columnDefinition="mediumblob")
+    private byte[] blobPhoto;
 	
 	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL )
 	private Collection<Order> orders = new ArrayList<Order>();
@@ -85,6 +91,14 @@ public class Product {
 
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
+	}
+	
+	public byte[] getBlobPhoto() {
+		return blobPhoto;
+	}
+
+	public void setBlobPhoto(byte[] blobPhoto) {
+		this.blobPhoto = blobPhoto;
 	}
 	
 }

@@ -2,7 +2,9 @@ package intelligient.transportation.dao;
 
 import java.util.List;
 
+import org.bouncycastle.asn1.isismtt.x509.Restriction;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -22,8 +24,38 @@ public class AdminDAO {
 	
 	
 	 @Autowired
-	private SessionFactory sessionFactory;
-		
+	 private SessionFactory sessionFactory;
+	 
+	 public String logInAdmin(Admin admin){
+			
+			Admin retrievedAdmin= new Admin();
+			try {
+				Session session;
+				session = sessionFactory.openSession();
+				session.beginTransaction();
+				
+				Criteria cc = session.createCriteria(Admin.class);
+				cc.add(Restrictions.eq("email", admin.getEmail()))
+				.add(Restrictions.eqOrIsNull("password", admin.getPassword()));
+				
+				List<Admin> adminList = (List<Admin>) cc.list();
+			     if(adminList.size()==0)
+			    	 return null;
+			     
+			     retrievedAdmin = adminList.get(0);
+			     String apiToken = TokenHandler.createToken(retrievedAdmin.getId());
+			     retrievedAdmin.setApiToken(apiToken);
+			     
+			     session.getTransaction().commit();
+			     session.close();
+			     System.out.println(retrievedAdmin.toString());
+			     
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return retrievedAdmin.getApiToken();
+		}
+	 
 		public Admin findByEmaiAndPassword(String e ,String p){
 		
 			
