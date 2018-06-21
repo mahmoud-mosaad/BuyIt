@@ -1,11 +1,14 @@
 package intelligient.transportation.algorithms;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import com.google.maps.errors.ApiException;
 
 public class Cluster {
 	
 	
-	 public ArrayList<ArrayList<point>> algorithm(ArrayList<point> requests,int numberOfClusters){
+	 public ArrayList<ArrayList<point>> algorithm(ArrayList<point> requests,int numberOfClusters,long[][] distanceMatrix) throws ApiException, InterruptedException, IOException{
          int PNO=requests.size();
          ArrayList<ArrayList<point>> clusters = new ArrayList<ArrayList<point>>();
          for(int i= 0 ; i<requests.size() ;i++){
@@ -26,9 +29,11 @@ public class Cluster {
              double minDist = 1000000;
              for(int k=0 ; k<clusters.get(i).size() ; k++){
                for(int w=0 ; w<clusters.get(j).size() ; w++){
-                 double distance = Haversine.HaversineInKM(clusters.get(i).get(k).latitude,clusters.get(i).get(k).longitude,
-                		                              clusters.get(j).get(w).latitude,clusters.get(j).get(w).longitude);
-                 if(distance<minDist){
+            	  /* String origin =String.valueOf(clusters.get(i).get(k).latitude)+","+String.valueOf(clusters.get(i).get(k).longitude);
+            	   String destination =String.valueOf(clusters.get(j).get(w).latitude)+","+String.valueOf(clusters.get(j).get(w).longitude);*/
+                 double distance = distanceMatrix[clusters.get(i).get(k).index][clusters.get(j).get(w).index];
+                 System.out.println("Distance = "+distance);
+                if(distance<minDist){
                    minDist=distance;
                  }
                  

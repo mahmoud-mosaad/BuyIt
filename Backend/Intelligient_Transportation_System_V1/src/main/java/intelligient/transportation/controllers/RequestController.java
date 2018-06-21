@@ -27,7 +27,7 @@ import intelligient.transportation.models.Request;
 
 @RestController
 @RequestMapping("/request")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public class RequestController {
 
 	@Autowired 
@@ -36,10 +36,31 @@ public class RequestController {
 	OrderDAO orderDAO;
 	
 	@RequestMapping(value="/", method=RequestMethod.GET)
-	public String getRequests(){
+	public ResponseEntity<Object> getRequests(){
 	
-		return requestDAO.getRequests().get(0).getUser().getName();
+		List<Request> requests = requestDao.getall();
+		 List<HashMap<String, String>> entities = new ArrayList<HashMap<String, String>>();
+		 
+		// entity.put("id", request.getId());
+	      for (Request request : requests) {
+	            HashMap<String,String> entity = new HashMap<String,String>();
+	            entity.put("id", String.valueOf(request.getId()));
+	            entity.put("customer", request.getUser().getName());
+	            entity.put("lat", String.valueOf(request.getUser().getLatitude()));
+	            entity.put("long", String.valueOf(request.getUser().getLongitude()));
+	            entity.put("priority", String.valueOf(request.getRequestPriority()));
+	            if(request.getRoute()!=null){
+	            entity.put("salesman", request.getRoute().getUser().getName());
+	            }else{
+		            entity.put("salesman", "null");
+	            }
+	            
+	            entities.add(entity);
+	        }
+	   return new ResponseEntity<Object>(entities, HttpStatus.OK);
+		
 	}
+	
 	
 	
 	@RequestMapping(value="/submitRequest", method=RequestMethod.POST)

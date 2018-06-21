@@ -1,14 +1,18 @@
 package intelligient.transportation.algorithms;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
 
+import com.google.maps.errors.ApiException;
+
 public class GA implements Solution {
-	public ArrayList<Chromosome> population = new ArrayList<Chromosome>();
+	   public ArrayList<Chromosome> population = new ArrayList<Chromosome>();
 	   public ArrayList<Chromosome> Offsprings = new ArrayList<Chromosome>();
 	   public ArrayList<point> requests = new ArrayList<point>();
+	   long[][]distanceMatrix;
 	   public int popSize;
 	   public int maxGeneration;
 	   public ArrayList<Double> fitness;
@@ -25,14 +29,19 @@ public class GA implements Solution {
 	           population.add(c);
 	       }
 	  }
-	   
-	   public ArrayList<Double> EvaluateFitness() {
+	   public long getDistance(int i,int j){
+		   
+		   return this.distanceMatrix[i][j];
+	   }
+	   public ArrayList<Double> EvaluateFitness() throws ApiException, InterruptedException, IOException {
 	       ArrayList<Double> fitnessList = new ArrayList<Double>();
 	       for(int i=0 ; i<popSize ; i++){
 	           Chromosome c=population.get(i);
 	           Double totalDistance=0.0;
 	          for(int j=1 ; j<c.genes.size() ; j++){
-	              totalDistance+=(Haversine.HaversineInM(c.genes.get(j-1).latitude,c.genes.get(j-1).longitude, c.genes.get(j).latitude,c.genes.get(j).longitude));
+	        	/*  String origin =String.valueOf(c.genes.get(j-1).latitude)+","+String.valueOf(c.genes.get(j-1).longitude);
+	        	  String destination =String.valueOf(c.genes.get(j).latitude)+","+String.valueOf(c.genes.get(j).longitude);*/
+	        	  totalDistance+=(getDistance(c.genes.get(j-1).index, c.genes.get(j).index));
 	          }
 	          fitnessList.add(1.0/totalDistance);
 	         
@@ -133,8 +142,7 @@ public class GA implements Solution {
 		   }
 		 
 		 
-		 public Chromosome RunCanonicalAlgorithm(ArrayList<point>requests){
-		       this.requests=requests;
+		 public Chromosome RunCanonicalAlgorithm() throws ApiException, InterruptedException, IOException{
 		       popSize=50;
 		       maxGeneration=100;
 		       int chromosomeSize=requests.size();
@@ -172,8 +180,10 @@ public class GA implements Solution {
 		   }
 
 		@Override
-		public ArrayList<point> construct(ArrayList<point> requests) {
-			Chromosome c=this.RunCanonicalAlgorithm(requests);
+		public ArrayList<point> construct(ArrayList<point> requests,long[][]distanceMatrix) throws ApiException, InterruptedException, IOException {
+			this.requests=requests;
+			this.distanceMatrix=distanceMatrix;
+			Chromosome c=this.RunCanonicalAlgorithm();
 			ArrayList<point> Orderedrequests=new ArrayList<point>();
 			for(int i=0 ; i<c.genes.size();i++)
 				Orderedrequests.add(c.genes.get(i));

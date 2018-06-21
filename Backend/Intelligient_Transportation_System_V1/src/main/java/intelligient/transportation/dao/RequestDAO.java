@@ -55,7 +55,8 @@ public class RequestDAO {
 			
 			return reqObject;
 		}
-		
+	
+	
 	public List<Request> getRequests() {
 		Session session;
 		session = sessionFactory.openSession();
@@ -79,4 +80,24 @@ public class RequestDAO {
          return req;
 	}
 	
+	public List<Request> getall(){
+		
+		Session session;
+		session = sessionFactory.openSession();
+		Criteria criteria= session.createCriteria(Request.class);
+	    List<Request> r = criteria.list();
+	    session.close();
+	    
+		return r;
+	}
+	
+	public void Delete(int id){
+	   Session session=sessionFactory.openSession();
+	   session.beginTransaction();
+	   Request req =  (Request) session.get(Request.class, id); 
+	   session.delete(req);
+	   session.getTransaction().commit();
+		session.close();	
+		
+	}
 }

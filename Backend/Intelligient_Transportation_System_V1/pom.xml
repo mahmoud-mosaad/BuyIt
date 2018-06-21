@@ -46,6 +46,16 @@
 			<groupId>commons-dbcp</groupId>
 			<artifactId>commons-dbcp</artifactId>
 		</dependency>
+		<dependency>
+				<groupId>com.google.maps</groupId>
+				<artifactId>google-maps-services</artifactId>
+				<version>0.2.7</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-nop</artifactId>
+				<version>1.7.25</version>
+		</dependency>
 
 				 <dependency>
             <groupId>com.auth0</groupId>
@@ -59,5 +69,6 @@
 		    <version>20180130</version>
 		</dependency>
 		
+
 	</dependencies>
 </project>
