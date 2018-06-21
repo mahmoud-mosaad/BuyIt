@@ -2,7 +2,6 @@ package intelligient.transportation.dao;
 
 import java.util.List;
 
-import org.bouncycastle.asn1.isismtt.x509.Restriction;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;

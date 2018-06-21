@@ -2,7 +2,7 @@ package intelligient.transportation.algorithms;
 
 import java.util.*;
 
-public class TravelingSalesmanHeldKarp implements Solution{
+public class TravelingSalesmanHeldKarp {
 
     private static int INFINITY = 100000000;
     ArrayList<Integer> bestRouteOrder;

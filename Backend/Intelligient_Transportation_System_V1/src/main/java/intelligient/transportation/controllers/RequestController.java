@@ -1,6 +1,7 @@
 package intelligient.transportation.controllers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -8,6 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -38,7 +41,7 @@ public class RequestController {
 	@RequestMapping(value="/", method=RequestMethod.GET)
 	public ResponseEntity<Object> getRequests(){
 	
-		List<Request> requests = requestDao.getall();
+		List<Request> requests = requestDAO.getall();
 		 List<HashMap<String, String>> entities = new ArrayList<HashMap<String, String>>();
 		 
 		// entity.put("id", request.getId());
