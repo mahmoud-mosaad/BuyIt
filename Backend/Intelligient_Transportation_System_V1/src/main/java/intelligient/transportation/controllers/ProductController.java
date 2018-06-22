@@ -107,7 +107,7 @@ public class ProductController {
 	  
 	    
 	    @RequestMapping(method=RequestMethod.GET, path= "/getAllProducts")
-	    public   List getAllProducts() {
+	    public List getAllProducts() {
 	    	
 	        return productRepository.getAllProduct();
 	    }

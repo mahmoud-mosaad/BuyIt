@@ -47,7 +47,7 @@ public class UserDAO {
 		
 	}
 
-	public String logInUser(User user){
+	public User logInUser(User user){
 		
 		User retrievedUser= new User();
 		try {
@@ -76,7 +76,7 @@ public class UserDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return retrievedUser.getApiToken();
+		return retrievedUser;
 	}
 	
   

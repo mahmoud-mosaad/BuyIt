@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
@@ -29,6 +30,9 @@ public class User {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 	
+    @Column(name = "role", insertable = false, updatable = false)
+    private String role;
+    
 	private String name;
 	
 	private String email;
@@ -149,9 +153,12 @@ public class User {
 		this.apiToken = apiToken;
 	}
 
-	
-	
-	
-	
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
 	
 }

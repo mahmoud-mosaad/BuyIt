@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Product {
 
@@ -31,6 +33,7 @@ public class Product {
 	private Integer quantity;
 	
 	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL )
+	@JsonIgnore
 	private Collection<Order> orders = new ArrayList<Order>();
 
 	public Integer getId() {

@@ -1,5 +1,6 @@
 package intelligient.transportation.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import intelligient.transportation.models.Product;
 
@@ -44,13 +47,21 @@ public class ProductDAO {
 	public Product getById(int product_id) {
 		Session session;
 		session = sessionFactory.openSession();
+		session.beginTransaction();
        Product p =  (Product) session.get(Product.class, product_id);
+       session.getTransaction().commit();
+       session.close();
        return p;
 	}
-	
+
 	public List getAllProduct() {
-		Criteria criteria = sessionFactory.openSession().createCriteria(Product.class);
-		return criteria.list();
+		Session session;
+		session = sessionFactory.openSession();
+		Criteria criteria = session.createCriteria(Product.class);
+		List products=criteria.list();
+       session.close();
+		
+		return products;
 	}
 	
 }
