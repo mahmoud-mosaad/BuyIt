@@ -2,18 +2,18 @@ package intelligient.transportation.algorithms;
 
 import java.util.*;
 
-public class TravelingSalesmanHeldKarp {
+public class TravelingSalesmanHeldKarp implements Solution{
 
     private static int INFINITY = 100000000;
     ArrayList<Integer> bestRouteOrder;
-    TravelingSalesmanHeldKarp(){
+    public TravelingSalesmanHeldKarp(){
     	 bestRouteOrder = new ArrayList<Integer>(); 
     
     }
     
-    public ArrayList<point> construct(ArrayList<point> llpoints){
+    public ArrayList<point> construct(ArrayList<point> llpoints, long[][]distanceMatrix){
     	
-    	double minCost = minCost(getDistanceMatrix(llpoints));
+    	double minCost = minCost(getRouteDistanceMatrix(distanceMatrix, llpoints));
     	
 		ArrayList<point> orderedPoints = new ArrayList<point>();
 		
@@ -28,7 +28,32 @@ public class TravelingSalesmanHeldKarp {
 		
 		return orderedPoints;
     }
+    
+	public long [][] getRouteDistanceMatrix(long [][] allRoutesDistanceMatrix, ArrayList<point> llpoints){
+		int numberOfPoints = llpoints.size();
+		long [][] routeDistanceMatrix = new long [numberOfPoints][numberOfPoints] ;
+    	
+    	for(int i=0;i<numberOfPoints ; i++)
+    	{
+    		for(int j=0;j<numberOfPoints;j++)
+    		{
+    			
+    			routeDistanceMatrix[i][j] = 
+    					allRoutesDistanceMatrix[llpoints.get(i).index][llpoints.get(j).index];
+    			//getDistanceFromLatLonInKm(points.get(i).latitude, points.get(i).longitude,
+    							//points.get(j).latitude, points.get(i).longitude);
 
+				System.out.print(routeDistanceMatrix[i][j]+" ");
+    		}
+
+			System.out.println();
+    	}
+    	System.out.println();
+    	return routeDistanceMatrix;
+	}
+	
+	
+    
     //public static double[][]
     public double [][] getDistanceMatrix(ArrayList<point> points){
     	int numberOfPoints = points.size();
@@ -118,7 +143,7 @@ public class TravelingSalesmanHeldKarp {
         }
     }
 
-    public double minCost(double[][] distance) {
+    public double minCost(long[][] distance) {
 
         //stores intermediate values in map
         Map<Index, Double> minCostDP = new HashMap<Index, Double>();

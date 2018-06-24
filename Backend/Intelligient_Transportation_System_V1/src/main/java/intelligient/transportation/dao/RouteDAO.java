@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import intelligient.transportation.models.Route;
+import intelligient.transportation.models.Salesman;
+import intelligient.transportation.models.User;
 
 @Component
 @Service
@@ -38,17 +40,30 @@ public class RouteDAO {
 		return null;
 		
 	}
-	/*
-	public List getUserDetails() {
-		Criteria criteria = sessionFactory.openSession().createCriteria(user.class);
-		return criteria.list();
-	}
 	
-	public user getById(int user_id) {
+	public Route getById(int id) {
+		try{
 		Session session;
 		session = sessionFactory.openSession();
-         user User =  (user) session.get(user.class, user_id);
-         return User;
+        Salesman user =  (Salesman) session.get(Salesman.class, id);
+        session.close();
+        return user.getRoute();
+		}catch(Exception e){
+			return null;
+		}
 	}
-	*/
+	
+	public void delete(int id) {
+		
+		Session session;
+		session = sessionFactory.openSession();
+		session.beginTransaction();
+		Route route =  (Route) session.get(Route.class, id);
+        route.setUser(null);
+        System.out.println(route.getId());
+        session.getTransaction().commit();
+        session.close();
+        
+	}
+	
 }

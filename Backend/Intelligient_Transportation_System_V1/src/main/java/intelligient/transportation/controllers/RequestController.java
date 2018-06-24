@@ -39,10 +39,16 @@ public class RequestController {
 	OrderDAO orderDAO;
 	
 	@RequestMapping(value="/", method=RequestMethod.GET)
-	public ResponseEntity<Object> getRequests(){
+	public List getRequests(@RequestHeader String token, HttpServletResponse response){
 	
+		int decodedUserId = TokenHandler.getUserIdFromToken(token);
+		System.out.println(decodedUserId);
+		if(decodedUserId==-1) {
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			return null;
+		}
 		List<Request> requests = requestDAO.getall();
-		 List<HashMap<String, String>> entities = new ArrayList<HashMap<String, String>>();
+	 List<HashMap<String, String>> entities = new ArrayList<HashMap<String, String>>();
 		 
 		// entity.put("id", request.getId());
 	      for (Request request : requests) {
@@ -60,7 +66,7 @@ public class RequestController {
 	            
 	            entities.add(entity);
 	        }
-	   return new ResponseEntity<Object>(entities, HttpStatus.OK);
+	   return entities;
 		
 	}
 	
@@ -68,17 +74,18 @@ public class RequestController {
 	
 	@RequestMapping(value="/submitRequest", method=RequestMethod.POST)
 	@ResponseBody
-	public String signUp(@RequestBody String request,@RequestHeader String token, HttpServletResponse response) {
+	public String submitRequest(@RequestBody String request,@RequestHeader String token, HttpServletResponse response) {
 		
-		/*
+		
 		System.out.println(token);
 		int decodedUserId = TokenHandler.getUserIdFromToken(token);
-		System.out.println(decodedUserId);
+		System.out.println(decodedUserId+"  aaaa");
 		if(decodedUserId==-1) {
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			return "Request rejected Wrong token, token can't be verified";
 		}
-		*/
+		
+		System.out.println("Submit Request");
 		Request reqObj = requestDAO.createRequest(request);
 		JSONObject req = new JSONObject(request);
 		JSONArray products = req.getJSONArray("products");

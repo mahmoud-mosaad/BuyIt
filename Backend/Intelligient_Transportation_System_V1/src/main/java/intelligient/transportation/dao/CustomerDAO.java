@@ -45,6 +45,7 @@ public class CustomerDAO {
 			Integer id =(Integer) session.save(customer);
 			String apiToken = TokenHandler.createToken(id);
 			customer.setApiToken(apiToken);
+			customer.setRole("Customer");
 			System.out.println("user is created With Id::"+id);
 			
 			session.getTransaction().commit();

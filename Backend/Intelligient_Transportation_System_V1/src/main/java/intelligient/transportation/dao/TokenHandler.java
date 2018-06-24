@@ -47,6 +47,8 @@ public class TokenHandler {
 	          exception.printStackTrace();
 	          //log Token Verification Failed
 	          return -1;
+	      } catch(Exception e){
+	    	  return -1;
 	      }
 	  }
 }

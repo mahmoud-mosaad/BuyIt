@@ -19,7 +19,9 @@ import intelligient.transportation.algorithms.Cluster;
 import intelligient.transportation.algorithms.DistanceMatrixAPI;
 import intelligient.transportation.algorithms.GA;
 import intelligient.transportation.algorithms.Haversine;
+import intelligient.transportation.algorithms.NN;
 import intelligient.transportation.algorithms.Solution;
+import intelligient.transportation.algorithms.TravelingSalesmanHeldKarp;
 import intelligient.transportation.algorithms.point;
 import intelligient.transportation.dao.RequestDAO;
 import intelligient.transportation.dao.RouteDAO;
@@ -56,32 +58,46 @@ public class TSPSolver {
 	      }
 	        
 	     return totalDistance;
-	    }
+	  }
+	
+
 	
 	public void runAlgorithms(ArrayList<ArrayList<point>> clusters, List<Salesman> salesman,long[][] distanceMatrix) throws ApiException, InterruptedException, IOException{
 		ArrayList<point> points = new ArrayList<point>();
 		for(int i=0 ; i<clusters.size() ;i++){
-			/*if(clusters.get(i).size()<=12)
-				Call Exact ->Zeyad*/
-			/*else{
-			 * Solution=new Assel();
+			if(clusters.get(i).size()<=12) {
+				//Call Exact ->Zeyad
+				//solution = new TravelingSalesmanHeldKarp();
+				solution = new NN();
+				
+				points = solution.construct(clusters.get(i), distanceMatrix);
+			}
+			
+			else{
+			 /* Solution=new Assel();
 			 * Solution=new Hamed();
 			 * Solution=new Mahmoud();
-			 * }
-			 */
+			 */ 
+			ArrayList<point> pointsNN = new ArrayList<point>();
+			ArrayList<point> pointsGA = new ArrayList<point>();
+			
+			solution = new NN();	
+			pointsNN = solution.construct(clusters.get(i), distanceMatrix);
+			double distanceNN = EvaluateDistance(points,distanceMatrix);
+			
 			solution = new GA();
-			
-			points=solution.construct(clusters.get(i),distanceMatrix);
-			
+			pointsGA=solution.construct(clusters.get(i),distanceMatrix);
 			double distanceGA = EvaluateDistance(points,distanceMatrix);
-			//Check the minimum distance and take the tour from it
 			
+			//if()
+			//Check the minimum distance and take the tour from it
+			}
 			Route route =new Route();
 			
 			route.setUser(salesman.get(i));
 			
-			for(int j=0 ; j<clusters.get(i).size() ;j++){
-				Request request = requestDao.getById(clusters.get(i).get(j).requestId);
+			for(int j=0 ; j<points.size() ;j++){
+				Request request = requestDao.getById(points.get(j).requestId);
 				request.setRequestPriority(j+1);
 				request.setRoute(route);
 				route.getRequests().add(request);
@@ -94,11 +110,11 @@ public class TSPSolver {
 		
 	}
 	@RequestMapping(value="/run", method=RequestMethod.GET)
-	public void run(){
+	public ArrayList<ArrayList<point>> run(){
 	    List<Salesman> salesman =  salesmanDao.getAvailableUsers();
 		List<Request> requests = requestDao.getRequests();
 		System.out.println(salesman.size()+"   "+requests.size());
-		if(salesman.size()==0 || requests.size()==0)return;
+		if(salesman.size()==0 || requests.size()==0) return null;
 		System.out.println("After null");
 		ArrayList<point> points = new ArrayList<point>();
 		String[] origins=new String[requests.size()];
@@ -120,21 +136,18 @@ public class TSPSolver {
 			clusters = cluster.algorithm(points, salesman.size(),distanceMatrix);
 			System.out.println("After clusters");
 			runAlgorithms(clusters, salesman,distanceMatrix);
-			return;
+			return clusters;
 			
 		}catch(Exception e){
 		
 			System.out.println("Catch");
 			//List<Request> request =requestDao.getall();
-			return; 
+			return null; 
 			//System.out.println("b4 return in run");
 			//return null;
 		}
 		
-		
-		
-		
-		
+
 	}
 	
 }

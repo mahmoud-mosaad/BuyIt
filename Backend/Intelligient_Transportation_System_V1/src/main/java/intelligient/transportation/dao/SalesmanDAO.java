@@ -33,6 +33,7 @@ public class SalesmanDAO {
 				Integer id =(Integer) session.save(salesman);
 				String apiToken = TokenHandler.createToken(id);
 				salesman.setApiToken(apiToken);
+				salesman.setRole("Salesman");
 				System.out.println("salesman is created With Id:"+ id);
 				
 				session.getTransaction().commit();
@@ -60,11 +61,16 @@ public class SalesmanDAO {
 			  session.update(s);
 			  session.getTransaction().commit();
 			  session.close();
-			
-			  
-			  
 		  }
-	  
+	  public Salesman checkIn(int id){
+		  Session session = sessionFactory.openSession();
+		  session.beginTransaction();
+		  Salesman s = (Salesman)session.get(Salesman.class ,id);
+		  s.setAvailable(true);
+		  session.getTransaction().commit();
+		  session.close();
+		  return s;
+	  }
 	
 	/*public List getUserDetails() {
 		Criteria criteria = sessionFactory.openSession().createCriteria(user.class);

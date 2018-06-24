@@ -20,11 +20,11 @@ public class Route {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL )
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE )
 	@JoinColumn(name="salesman_id")
 	private User user;
 	
-	@OneToMany(mappedBy = "route", fetch = FetchType.LAZY, cascade = CascadeType.ALL )
+	@OneToMany(mappedBy = "route", fetch = FetchType.EAGER, cascade = CascadeType.ALL )
 	private Collection<Request> requests = new ArrayList<Request>();
 
 	public Integer getId() {

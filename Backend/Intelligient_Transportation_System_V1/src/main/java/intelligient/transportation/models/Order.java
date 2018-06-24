@@ -23,7 +23,7 @@ public class Order {
 	@ManyToOne(fetch = FetchType.LAZY )
 	private Product product;
 	
-	@ManyToOne(fetch = FetchType.LAZY )
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL )
 	private Request request;
 	
 	public Integer getId() {
