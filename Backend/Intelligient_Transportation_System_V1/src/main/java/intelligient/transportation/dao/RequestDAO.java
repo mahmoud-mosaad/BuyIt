@@ -46,14 +46,14 @@ public class RequestDAO {
 				System.out.println("Request is created With Id::"+requestId);
 				session.getTransaction().commit();
 				session.close();
-				
-				
+				return reqObject;
 
 			} catch (Exception e) {
 				e.printStackTrace();
+				return null;
 			}
 			
-			return reqObject;
+			
 		}
 	
 	
@@ -91,13 +91,21 @@ public class RequestDAO {
 		return r;
 	}
 	
-	public void Delete(int id){
+	public boolean Delete(int id){
 	   Session session=sessionFactory.openSession();
 	   session.beginTransaction();
-	   Request req =  (Request) session.get(Request.class, id); 
+	   try{
+	   Request req =  (Request) session.get(Request.class, id);
+	   
+	   if(req.getRoute()!=null)
+	       req.getRoute().getRequests().removeIf((Request request)->request.getId()==req.getId());
 	   session.delete(req);
 	   session.getTransaction().commit();
-		session.close();	
+		session.close();
+		return true;
+	   }catch(Exception e){
+		   return false;
+	   }
 		
 	}
 }

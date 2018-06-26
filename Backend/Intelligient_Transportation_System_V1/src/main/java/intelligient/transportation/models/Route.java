@@ -22,7 +22,7 @@ public class Route {
 	
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE )
 	@JoinColumn(name="salesman_id")
-	private User user;
+	private Salesman user;
 	
 	@OneToMany(mappedBy = "route", fetch = FetchType.EAGER, cascade = CascadeType.ALL )
 	private Collection<Request> requests = new ArrayList<Request>();
@@ -35,11 +35,11 @@ public class Route {
 		this.id = id;
 	}
 
-	public User getUser() {
+	public Salesman getUser() {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(Salesman user) {
 		this.user = user;
 	}
 

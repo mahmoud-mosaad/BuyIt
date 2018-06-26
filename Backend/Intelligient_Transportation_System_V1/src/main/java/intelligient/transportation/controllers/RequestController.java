@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,13 +40,13 @@ public class RequestController {
 	OrderDAO orderDAO;
 	
 	@RequestMapping(value="/", method=RequestMethod.GET)
-	public List getRequests(@RequestHeader String token, HttpServletResponse response){
+	public List getRequests(@RequestHeader String token,@RequestHeader String type, HttpServletResponse response){
 	
 		int decodedUserId = TokenHandler.getUserIdFromToken(token);
 		System.out.println(decodedUserId);
-		if(decodedUserId==-1) {
+		if(decodedUserId==-1 || !type.equals("Admin")) {
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			return null;
+			return null;	
 		}
 		List<Request> requests = requestDAO.getall();
 	 List<HashMap<String, String>> entities = new ArrayList<HashMap<String, String>>();
@@ -86,10 +87,17 @@ public class RequestController {
 		}
 		
 		System.out.println("Submit Request");
-		Request reqObj = requestDAO.createRequest(request);
 		JSONObject req = new JSONObject(request);
 		JSONArray products = req.getJSONArray("products");
-		
+		if(products.length()==0){
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return null;
+		}
+		 Request reqObj = requestDAO.createRequest(request);
+		 if(reqObj==null){
+		     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return null;
+		 }
 		for (int i = 0; i < products.length(); i++) {
 		    JSONObject prod = products.getJSONObject(i);
 		    int prodId = prod.getInt("productId");
@@ -102,12 +110,48 @@ public class RequestController {
 		    order.setQuantity(quantity);
 		    order.setProduct(p);
 		    order.setRequest(reqObj);
-		    
 		    orderDAO.createOrder(order);
+	
 		}
 		
 		
 		return request;
+	}
+	
+	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
+	public ResponseEntity<Object> RejectRequests(@PathVariable int id, @RequestHeader String token,
+			@RequestHeader String type, HttpServletResponse response){
+		
+		int decodedUserId = TokenHandler.getUserIdFromToken(token);
+		System.out.println(decodedUserId);
+		if(decodedUserId==-1 || !type.equals("Admin")) {
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			return null;	
+		}
+		
+	   this.requestDAO.Delete(id);
+	   
+	    List<Request> requests = requestDAO.getall();
+		 List<HashMap<String, String>> entities = new ArrayList<HashMap<String, String>>();
+		 
+		// entity.put("id", request.getId());
+	      for (Request request : requests) {
+	            HashMap<String,String> entity = new HashMap<String,String>();
+	            entity.put("id", String.valueOf(request.getId()));
+	            entity.put("customer", request.getUser().getName());
+	            entity.put("lat", String.valueOf(request.getUser().getLatitude()));
+	            entity.put("long", String.valueOf(request.getUser().getLongitude()));
+	            entity.put("priority", String.valueOf(request.getRequestPriority()));
+	            if(request.getRoute()!=null){
+	            entity.put("salesman", request.getRoute().getUser().getName());
+	            }else{
+		            entity.put("salesman", "null");
+	            }
+	            
+	            entities.add(entity);
+	        }
+	   return new ResponseEntity<Object>(entities, HttpStatus.OK);
+		
 	}
 	
 }

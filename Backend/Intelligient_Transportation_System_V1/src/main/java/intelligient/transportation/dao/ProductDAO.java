@@ -24,7 +24,7 @@ public class ProductDAO {
 		
 	  private SessionFactory sessionFactory;
 	
-	  public void addProduct(Product product){
+	  public Boolean addProduct(Product product){
 		Session session= null;
 		try {
 			session = sessionFactory.openSession();
@@ -35,8 +35,9 @@ public class ProductDAO {
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+			return false;
 		}
-		
+		return true;
 	}
 	/*
 	public List getUserDetails() {

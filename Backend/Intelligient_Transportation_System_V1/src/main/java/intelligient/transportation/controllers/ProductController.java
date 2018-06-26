@@ -38,45 +38,64 @@ public class ProductController {
 	
 	@RequestMapping(value="/addProduct", method=RequestMethod.POST)
 	@ResponseBody
-	public String addProduct(@RequestParam("file") MultipartFile file, 
+	public Boolean addProduct(@RequestParam("file") MultipartFile file, 
 			@RequestParam("product") String productJSON, @RequestHeader String token, 
-			HttpServletResponse response) {
-		   
+			@RequestHeader String type, HttpServletResponse response) {
+
+		System.out.println(type);
 		int decodedUserId = TokenHandler.getUserIdFromToken(token);
-		if(decodedUserId==-1) {
+		if(decodedUserId==-1 || !type.equals("Admin")) {
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			return null;
-		}    
+		}
+		
+		
 		
 		if (!file.isEmpty()) {
             try {
-                byte[] bytes = file.getBytes();
-                
-                Product prod = new ObjectMapper().readValue(productJSON, Product.class);
+        		Product prod = new ObjectMapper().readValue(productJSON, Product.class);
+				prod.setPhoto("ProductsImages/" + 
+          				prod.getName() + "_" + file.getOriginalFilename());
+        		
+        		if(prod.getName().trim().equals("") || prod.getPrice()==null)
+        	    	prod.setName(null);
+        		
+            	Boolean save = productRepository.addProduct(prod);
+            	if(save==false){
+            		response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            		return false;
+            	}
+            	
+                byte[] bytes = file.getBytes();                
                 String path = "src/main/resources/static/ProductsImages/" + 
                 				prod.getName() + "_" + file.getOriginalFilename();
+        	    
 				try {
 					 BufferedOutputStream stream = 
 		                        new BufferedOutputStream(new FileOutputStream
 		                        		(new File(path)));
 					
-					 prod.setPhoto("ProductsImages/" + 
-             				prod.getName() + "_" + file.getOriginalFilename());
+
 		             stream.write(bytes);
 		             stream.close();
 		            } catch (Exception e) {
+		            	response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		                System.out.println( "You failed to covert " + prod.getName() + 
 		                		" " + file.getName() + " => " + e.getMessage());
-		                return null;
+		                return false;
 		            }	
-				productRepository.addProduct(prod);
+
                 
-                return  bytes + " You successfully added the product into db";
+                return  true;
             } catch (Exception e) {
-                return "You failed to add the product" + e.getMessage();
+            	response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            	System.out.println("You failed to add the product because " + e);
+                return false;
             }
         } else {
-            return "You failed to add the product because the file was empty.";
+        	response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        	System.out.println("You failed to add the product because the file was empty.");
+            return false;
         }
 	       
 	}

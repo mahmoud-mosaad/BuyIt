@@ -24,19 +24,29 @@ public class SalesmanController {
 	
 	@RequestMapping(value="/signUp", method=RequestMethod.POST)
 	@ResponseBody
-	public Salesman signUp(@RequestBody Salesman salesman) {
+	public Salesman signUp(@RequestBody Salesman salesman, HttpServletResponse response) {
+		if(salesman.getEmail().trim().equals(""))
+			salesman.setEmail(null);
+	    if(salesman.getPassword().trim().equals(""))
+	    	salesman.setPassword(null);
+	    
+		boolean save = salesmanDAO.createSalesman(salesman);
+		if(!save){
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return null;
+		}
+		 return salesman;
 		
-		salesmanDAO.createSalesman(salesman);
-		return salesman;
 	}
+	
 	
 	@RequestMapping(value="/checkIn/{id}", method=RequestMethod.PUT)
 	@ResponseBody
-	public Boolean checkIn(@PathVariable int id,@RequestHeader String token, HttpServletResponse response) {
+	public Boolean checkIn(@PathVariable int id,@RequestHeader String token, @RequestHeader String type,HttpServletResponse response) {
 		
 		int decodedUserId = TokenHandler.getUserIdFromToken(token);
 		System.out.println(decodedUserId);
-		if(decodedUserId==-1) {
+		if(decodedUserId==-1 || !type.equals("Salesman") || decodedUserId!=id) {
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			return null;
 		}

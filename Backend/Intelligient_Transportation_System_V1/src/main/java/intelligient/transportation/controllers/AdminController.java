@@ -2,6 +2,8 @@ package intelligient.transportation.controllers;
 
 import java.util.HashMap;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,8 +29,16 @@ public class AdminController extends UserController{
 	
 	@RequestMapping(value="/logInAdmin", method=RequestMethod.POST)
 	@ResponseBody
-	public String logIn(@RequestBody Admin admin) {
-		
-		return adminDAO.logInAdmin(admin);
+	public HashMap<String, String> logIn(@RequestBody Admin admin, HttpServletResponse response) {
+		String token   = adminDAO.logInAdmin(admin);
+		if(token==null){
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return null;
+		}
+			
+		HashMap<String, String> data = new HashMap<String, String>();
+		data.put( "token",  token);
+		data.put("userType", "Admin");
+		return data;
 	}
 }

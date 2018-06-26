@@ -35,7 +35,8 @@ public class AdminDAO {
 				
 				Criteria cc = session.createCriteria(Admin.class);
 				cc.add(Restrictions.eq("email", admin.getEmail()))
-				.add(Restrictions.eqOrIsNull("password", admin.getPassword()));
+				.add(Restrictions.eqOrIsNull("password", admin.getPassword()))
+				.add(Restrictions.eq("role", "Admin"));
 				
 				List<Admin> adminList = (List<Admin>) cc.list();
 			     if(adminList.size()==0)

@@ -51,7 +51,7 @@ public class RouteController {
 			json.put("phone", r.getUser().getPhone());
 			locations.add(json);
 		}
-		//routeDAO.delete(route.getId());
+		routeDAO.delete(route.getId());
 		}
 		
 		return locations;

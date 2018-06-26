@@ -16,6 +16,8 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 
+import javax.validation.constraints.NotNull;
+
 @Entity
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(
@@ -35,8 +37,11 @@ public class User {
     
 	private String name;
 	
+	@NotNull
+	@Column(unique = true)
 	private String email;
 	
+	@NotNull
 	private String password;
 	
 	private String passwordSalt;

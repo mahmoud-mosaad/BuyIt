@@ -34,7 +34,7 @@ public class CustomerDAO {
 
 	
 	@Transactional
-	public void createCustomer(Customer customer){
+	public boolean createCustomer(Customer customer){
 	
 		
 		try {
@@ -50,8 +50,10 @@ public class CustomerDAO {
 			
 			session.getTransaction().commit();
 			session.close();
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
+			return false;
 		}
 		
 	}

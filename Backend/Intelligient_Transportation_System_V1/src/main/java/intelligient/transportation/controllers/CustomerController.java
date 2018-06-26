@@ -1,5 +1,7 @@
 package intelligient.transportation.controllers;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,10 +21,19 @@ public class CustomerController extends UserController{
 	
 	@RequestMapping(value="/signUp", method=RequestMethod.POST)
 	@ResponseBody
-	public Customer signUp(@RequestBody Customer customer) {
+	public Customer signUp(@RequestBody Customer customer , HttpServletResponse response) {
+	    if(customer.getEmail().trim().equals(""))
+	    	customer.setEmail(null);
+	    if(customer.getPassword().trim().equals(""))
+	    	customer.setPassword(null);
+	    
+		boolean save = customerDAO.createCustomer(customer);
+		if(!save){
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return null;
+		}
+		 return customer;
 		
-		customerDAO.createCustomer(customer);
-		return customer;
 	}
 	
 

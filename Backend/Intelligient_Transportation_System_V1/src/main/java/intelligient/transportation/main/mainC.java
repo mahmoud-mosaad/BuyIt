@@ -13,7 +13,8 @@ public class mainC {
 
 	public static void main(String[] args) {
 		SpringApplication.run(mainC.class, args);
-
+		
 	}
-
+	
 }
+	

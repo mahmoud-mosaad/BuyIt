@@ -21,7 +21,7 @@ public class SalesmanDAO {
 		@Autowired
 		private SessionFactory sessionFactory;  
 		  
-		public void createSalesman(Salesman salesman){
+		public boolean createSalesman(Salesman salesman){
 			
 			salesman.setAvailable(true);
 				
@@ -38,8 +38,10 @@ public class SalesmanDAO {
 				
 				session.getTransaction().commit();
 				session.close();
+				return true;
 			} catch (Exception e) {
 				e.printStackTrace();
+				return false;
 			}
 			
 		}

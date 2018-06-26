@@ -2,6 +2,8 @@ package intelligient.transportation.controllers;
 
 import java.util.HashMap;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,10 +25,14 @@ public class UserController {
 	
 	@RequestMapping(value="/logIn", method=RequestMethod.POST)
 	@ResponseBody
-	public HashMap<String, String> logInUser(@RequestBody User user) {
+	public HashMap<String, String> logInUser(@RequestBody User user,HttpServletResponse response) {
 		
 		HashMap<String, String> data = new HashMap<String, String>();
 		User newUser = userDAO.logInUser(user);
+		if(newUser==null){
+			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+			return null;
+		}
 		data.put( "token",  newUser.getApiToken());
 		data.put("userId", newUser.getId().toString());
 		data.put("userType", newUser.getRole());

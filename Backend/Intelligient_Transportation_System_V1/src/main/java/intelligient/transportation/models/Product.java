@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -22,14 +23,16 @@ public class Product {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 	
+	@NotNull
 	private String name;
 	
 	private String description;
 	
 	private String photo;
 	
+	@NotNull
 	private Integer price;
-	
+	@NotNull
 	private Integer quantity;
 	
 	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL )

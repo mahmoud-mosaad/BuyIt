@@ -29,7 +29,7 @@ public class Request {
 	@JoinColumn(name="customer_id")
 	private User user;
 	
-	@ManyToOne(fetch = FetchType.EAGER )
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Route route;
 
 	public Route getRoute() {
