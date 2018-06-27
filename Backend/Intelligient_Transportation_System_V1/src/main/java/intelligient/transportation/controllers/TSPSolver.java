@@ -65,33 +65,41 @@ public class TSPSolver {
 	public void runAlgorithms(ArrayList<ArrayList<point>> clusters, List<Salesman> salesman,long[][] distanceMatrix) throws ApiException, InterruptedException, IOException{
 		ArrayList<point> points = new ArrayList<point>();
 		for(int i=0 ; i<clusters.size() ;i++){
-			if(clusters.get(i).size()<=12) {
-				//Call Exact ->Zeyad
-				//solution = new TravelingSalesmanHeldKarp();
-				solution = new NN();
+			points = clusters.get(i);
+			
+			if(clusters.get(i).size()>2) {
+				if(clusters.get(i).size()<=12) {
+					//Call Exact ->Zeyad
+					solution = new TravelingSalesmanHeldKarp();
+					
+					points = solution.construct(clusters.get(i), distanceMatrix);
+				}
 				
-				points = solution.construct(clusters.get(i), distanceMatrix);
+				else{
+				 /* Solution=new Assel();
+				 * Solution=new Hamed();
+				 * Solution=new Mahmoud();
+				 */ 
+					/*
+				ArrayList<point> pointsNN = new ArrayList<point>();
+				ArrayList<point> pointsGA = new ArrayList<point>();
+				
+				solution = new NN();	
+				pointsNN = solution.construct(clusters.get(i), distanceMatrix);
+				double distanceNN = EvaluateDistance(points,distanceMatrix);
+				
+				solution = new GA();
+				pointsGA=solution.construct(clusters.get(i),distanceMatrix);
+				double distanceGA = EvaluateDistance(points,distanceMatrix);
+				*/
+				//if()
+				//Check the minimum distance and take the tour from it
+					
+					
+					//set points = the best route here
+				}
 			}
 			
-			else{
-			 /* Solution=new Assel();
-			 * Solution=new Hamed();
-			 * Solution=new Mahmoud();
-			 */ 
-			ArrayList<point> pointsNN = new ArrayList<point>();
-			ArrayList<point> pointsGA = new ArrayList<point>();
-			
-			solution = new NN();	
-			pointsNN = solution.construct(clusters.get(i), distanceMatrix);
-			double distanceNN = EvaluateDistance(points,distanceMatrix);
-			
-			solution = new GA();
-			pointsGA=solution.construct(clusters.get(i),distanceMatrix);
-			double distanceGA = EvaluateDistance(points,distanceMatrix);
-			
-			//if()
-			//Check the minimum distance and take the tour from it
-			}
 			Route route =new Route();
 			
 			route.setUser(salesman.get(i));
@@ -103,6 +111,7 @@ public class TSPSolver {
 				route.getRequests().add(request);
 				
 			}
+			
 			routeDao.createRoute(route);
 			salesman.get(i).setAvailable(false);
 			salesmanDao.update(salesman.get(i));
@@ -115,6 +124,7 @@ public class TSPSolver {
 		List<Request> requests = requestDao.getRequests();
 		System.out.println(salesman.size()+"   "+requests.size());
 		if(salesman.size()==0 || requests.size()==0) return null;
+		
 		System.out.println("After null");
 		ArrayList<point> points = new ArrayList<point>();
 		String[] origins=new String[requests.size()];
@@ -133,14 +143,26 @@ public class TSPSolver {
 		try{
 			long[][] distanceMatrix = DistanceMatrixAPI.distanceMatrix(origins, destinations);
 			System.out.println("After distanceMatrix");
-			clusters = cluster.algorithm(points, salesman.size(),distanceMatrix);
+			int numberOfClusters = 
+					salesman.size() > requests.size() ? requests.size(): salesman.size(); 
+			clusters = cluster.algorithm(points, numberOfClusters,distanceMatrix);
+			
+			System.out.println("Clusters size = "+ clusters.size());
+	         for(int i= 0 ; i<clusters.size() ;i++){
+	            for(point p : clusters.get(i)) {
+	            	System.out.println(p.requestId+ " " + p.index);
+	    			
+	            }
+	            System.out.println();
+	         }
+	            
 			System.out.println("After clusters");
 			runAlgorithms(clusters, salesman,distanceMatrix);
 			return clusters;
 			
 		}catch(Exception e){
 		
-			System.out.println("Catch");
+			System.out.println("Catch "+ e);
 			//List<Request> request =requestDao.getall();
 			return null; 
 			//System.out.println("b4 return in run");

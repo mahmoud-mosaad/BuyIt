@@ -44,7 +44,7 @@ public class RequestController {
 	
 		int decodedUserId = TokenHandler.getUserIdFromToken(token);
 		System.out.println(decodedUserId);
-		if(decodedUserId==-1 || !type.equals("Admin")) {
+		if(decodedUserId==-1 || !type.equals("Admin")) 	{
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			return null;	
 		}
@@ -80,7 +80,7 @@ public class RequestController {
 		
 		System.out.println(token);
 		int decodedUserId = TokenHandler.getUserIdFromToken(token);
-		System.out.println(decodedUserId+"  aaaa");
+		System.out.println("Token user Id " + decodedUserId);
 		if(decodedUserId==-1) {
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			return "Request rejected Wrong token, token can't be verified";

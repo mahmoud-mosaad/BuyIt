@@ -22,11 +22,11 @@ public class Cluster {
           {
         	
           double dist[][]=new double[PNO][PNO];
-          double min=100000;
+          double min=Double.MAX_VALUE;
           int m1=0,m2=0;
           for(int i=0 ; i<clusters.size() ; i++){
            for(int j=0 ; j<clusters.size() ;j++){
-             double minDist = 1000000;
+             double minDist = Double.MAX_VALUE;
              for(int k=0 ; k<clusters.get(i).size() ; k++){
                for(int w=0 ; w<clusters.get(j).size() ; w++){
             	  /* String origin =String.valueOf(clusters.get(i).get(k).latitude)+","+String.valueOf(clusters.get(i).get(k).longitude);

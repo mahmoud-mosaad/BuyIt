@@ -13,17 +13,20 @@ public class TravelingSalesmanHeldKarp implements Solution{
     
     public ArrayList<point> construct(ArrayList<point> llpoints, long[][]distanceMatrix){
     	
+    	if(llpoints.size()<=2)
+    		return llpoints;
     	double minCost = minCost(getRouteDistanceMatrix(distanceMatrix, llpoints));
-    	
+		System.out.println("After min cost");
+
 		ArrayList<point> orderedPoints = new ArrayList<point>();
 		
 		for (int i=0;i<this.bestRouteOrder.size()-1; i++){
 		    int idx = this.bestRouteOrder.get(i);
-			//System.out.print(idx+" ");
+			System.out.print(idx+" ");
 		    orderedPoints.add(llpoints.get(idx));
 		}
-		
-		//System.out.println();
+		System.out.println("After best route order");
+		System.out.println();
 
 		
 		return orderedPoints;
@@ -150,7 +153,6 @@ public class TravelingSalesmanHeldKarp implements Solution{
         Map<Index, Integer> parent = new HashMap<Index, Integer>();
 
         List<Set<Integer>> allSets = generateCombination(distance.length - 1);
-
         for(Set<Integer> set : allSets) {
             for(int currentVertex = 1; currentVertex < distance.length; currentVertex++) {
                 if(set.contains(currentVertex)) {
