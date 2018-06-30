@@ -39,8 +39,10 @@ public class ProductController {
 	@RequestMapping(value="/addProduct", method=RequestMethod.POST)
 	@ResponseBody
 	public Boolean addProduct(@RequestParam("file") MultipartFile file, 
-			@RequestParam("product") String productJSON, @RequestHeader String token, 
-			@RequestHeader String type, HttpServletResponse response) {
+		@RequestParam("description") String productDescription, @RequestParam("name") 
+		String productName, @RequestParam("price") Integer productPrice, 
+		@RequestParam("quantity") Integer productQuantity, @RequestHeader String token, 
+		@RequestHeader String type, HttpServletResponse response) {
 
 		System.out.println(type);
 		int decodedUserId = TokenHandler.getUserIdFromToken(token);
@@ -53,8 +55,14 @@ public class ProductController {
 		
 		if (!file.isEmpty()) {
             try {
-        		Product prod = new ObjectMapper().readValue(productJSON, Product.class);
-				prod.setPhoto("ProductsImages/" + 
+        		//Product prod = new ObjectMapper().readValue(productJSON, Product.class);
+            	Product prod = new Product();
+            	prod.setDescription(productDescription);
+            	prod.setName(productName);
+            	prod.setPrice(productPrice);
+            	prod.setQuantity(productQuantity);
+            	
+            	prod.setPhoto("ProductsImages/" + 
           				prod.getName() + "_" + file.getOriginalFilename());
         		
         		if(prod.getName().trim().equals("") || prod.getPrice()==null)

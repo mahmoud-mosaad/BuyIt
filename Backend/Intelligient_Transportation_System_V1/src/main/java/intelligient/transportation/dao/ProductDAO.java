@@ -45,7 +45,7 @@ public class ProductDAO {
 		return criteria.list();
 	}
 	*/
-	public Product getById(int product_id) {
+	public Product getById(int product_id) {	
 		Session session;
 		session = sessionFactory.openSession();
 		session.beginTransaction();
@@ -54,7 +54,18 @@ public class ProductDAO {
        session.close();
        return p;
 	}
-
+	/*
+	public Product updateProduct(int product_id, int quantity) {
+		Session session;
+		session = sessionFactory.openSession();
+		session.beginTransaction();
+       Product p =  (Product) session.get(Product.class, product_id);
+       p.setQuantity(p.getQuantity() - quantity);
+       session.getTransaction().commit();
+       session.close();
+       return p;
+	}
+	*/
 	public List getAllProduct() {
 		Session session;
 		session = sessionFactory.openSession();

@@ -13,16 +13,18 @@ public class TravelingSalesmanHeldKarp implements Solution{
     
     public ArrayList<point> construct(ArrayList<point> llpoints, long[][]distanceMatrix){
     	
+    	for(point p: llpoints)
+    		System.out.println(p.index);
     	if(llpoints.size()<=2)
     		return llpoints;
     	double minCost = minCost(getRouteDistanceMatrix(distanceMatrix, llpoints));
-		System.out.println("After min cost");
+		System.out.println("After min cost " + minCost);
 
 		ArrayList<point> orderedPoints = new ArrayList<point>();
 		
-		for (int i=0;i<this.bestRouteOrder.size()-1; i++){
+		for (int i=0;i<this.bestRouteOrder.size(); i++){
 		    int idx = this.bestRouteOrder.get(i);
-			System.out.print(idx+" ");
+			System.out.print(idx+" p:" + llpoints.get(idx).index);
 		    orderedPoints.add(llpoints.get(idx));
 		}
 		System.out.println("After best route order");
@@ -174,6 +176,7 @@ public class TravelingSalesmanHeldKarp implements Solution{
                 if(set.size() == 0) {
                     minCost = distance[0][currentVertex];
                 }
+                
                 minCostDP.put(index, minCost);
                 parent.put(index, minPrevVertex);
             }
@@ -188,24 +191,24 @@ public class TravelingSalesmanHeldKarp implements Solution{
         //to avoid ConcurrentModificationException copy set into another set while iterating
         Set<Integer> copySet = new HashSet<Integer>(set);
         for(int k : set) {
-        	double cost = distance[k][0] + getCost(copySet, k, minCostDP);
+        	double cost =   getCost(copySet, k, minCostDP);
             if(cost < min) {
                 min = cost;
                 prevVertex = k;
             }
         }
 
-        parent.put(Index.createIndex(0, set), prevVertex);
-        printTour(parent, distance.length);
+        //parent.put(Index.createIndex(0, set), prevVertex);
+        printTour(parent, prevVertex, distance.length);
         return min;
     }
 
-    private void printTour(Map<Index, Integer> parent, int totalVertices) {
+    private void printTour(Map<Index, Integer> parent,Integer start, int totalVertices) {
         Set<Integer> set = new HashSet<Integer>();
-        for(int i=0; i < totalVertices; i++) {
+        for(int i=1; i < totalVertices; i++) {
             set.add(i);
         }
-        Integer start = 0;
+        //Integer start = 0;
         Deque<Integer> stack = new LinkedList<Integer>();
         while(true) {
             stack.push(start);
@@ -271,7 +274,3 @@ public class TravelingSalesmanHeldKarp implements Solution{
         return set;
     }
 }
-
-
-
-
