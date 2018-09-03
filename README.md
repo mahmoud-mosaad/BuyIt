@@ -12,4 +12,4 @@ For more information read our documents in path ./docs/transportation-system.pdf
 
 # Platforms
 Customers and Salesmen uses android platform
-Admin use Web platform (Laravel based)
+Admin use Web platform 
